@@ -2,31 +2,10 @@
 # yarn lockfile v1
 
 
-"@types/angular-animate@^1.5.10":
-  version "1.5.10"
-  resolved "https://registry.yarnpkg.com/@types/angular-animate/-/angular-animate-1.5.10.tgz#b94b45358c61163f1478768e8b081c76439c515f"
-  integrity sha512-MnYYvTHAPUbtT6gqwrnl6k3a03A5BlNz1nVlwVGxyS+MeWCX4DC14SJ/pgJUa8wj+J04wZ2prMxFsOfp6cyjjQ==
-  dependencies:
-    "@types/angular" "*"
-
-"@types/angular-material@^1.1.69":
-  version "1.1.69"
-  resolved "https://registry.yarnpkg.com/@types/angular-material/-/angular-material-1.1.69.tgz#19096a437f00cde8c5bab02ea1d2856d3603d709"
-  integrity sha512-XHn+aa70SOncjRoJKrkZmlZy8e7WyR/YXM2IcHDEvfwz+yCj+cQjGj8SnVr5/a5vs0ONeidLIKSq8vCyctcQOg==
-  dependencies:
-    "@types/angular" "*"
-
 "@types/angular-route@^1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@types/angular-route/-/angular-route-1.7.0.tgz#ba12d09df1aac3c88e3684500001daedfc97fb69"
   integrity sha512-gctkSXUY7hDwFeW8il7f3+sdMmds0JaMnHvrZmqX79DHXf2D72+SHxJHIt5i6+0BrhoqdWdpgziSxuKnkAUAQw==
-  dependencies:
-    "@types/angular" "*"
-
-"@types/angular-sanitize@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@types/angular-sanitize/-/angular-sanitize-1.7.0.tgz#a9a1c43621e89d3bd8b7aca6379a4a78a7c889fe"
-  integrity sha512-UvVhD91++MEaYrRb+fJ6kWFaRhnAZn8yj6XN5bP4p6KuShuYPr3s2zT29yNltkVW4WMGh7UWDW753wWlQmKyQA==
   dependencies:
     "@types/angular" "*"
 
@@ -309,35 +288,10 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-angular-animate@^1.7.9:
-  version "1.7.9"
-  resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.7.9.tgz#a397f82434c1e7ed5b7a298fa70fc3de989a6785"
-  integrity sha512-fV+AISy/HTzurQH2ngsJg+lLIvfu0ahc1h4AYKauaXVw97rZc2k4iUA1bMstiEyClsdayQX568kjQc1NK+oYhw==
-
-angular-aria@^1.7.9:
-  version "1.7.9"
-  resolved "https://registry.yarnpkg.com/angular-aria/-/angular-aria-1.7.9.tgz#90c61895ffbd876e95915222b32a7bd0070af7e3"
-  integrity sha512-luI3Jemd1AbOQW0krdzfEG3fM0IFtLY0bSSqIDEx3POE0XjKIC1MkrO8Csyq9PPgueLphyAPofzUwZ8YeZ88SA==
-
-angular-material@^1.1.21:
-  version "1.1.21"
-  resolved "https://registry.yarnpkg.com/angular-material/-/angular-material-1.1.21.tgz#a3dac5e7d1bdc4b20aaf26315ef00f4a561068cc"
-  integrity sha512-BiqvEu82dqQ4Sb4OjJHdVp/YJvFEMrtr7K2eS+6qlWPWUiF9K2K6IkX2H3p0wD7QlscjTz8n9W8uKL46PQjlCQ==
-
-angular-messages@^1.7.9:
-  version "1.7.9"
-  resolved "https://registry.yarnpkg.com/angular-messages/-/angular-messages-1.7.9.tgz#6403b7f56df4b17b62d88762ac5e6b1702347fd2"
-  integrity sha512-OdJihuO6AW+m1/r9OdW5riCwacn3dL1agQvgu6Cww3a7OARXXN0vxOpsZCNk4yg4CuD7Et3tiz4DymhvZkydvw==
-
 angular-route@^1.7.9:
   version "1.7.9"
   resolved "https://registry.yarnpkg.com/angular-route/-/angular-route-1.7.9.tgz#f9910a2af0ba3ad7a969c5dd369b8360d0d5e4ef"
   integrity sha512-vRoj5hzdQtWbODhWJqDzD1iNOEfCKshO6GFBuPVV7RHlPjzIc4R2dHCc7Qiv/8F3LDxJDohc6vSnTDMLHuaqeA==
-
-angular-sanitize@^1.7.9:
-  version "1.7.9"
-  resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.7.9.tgz#6b4d5e826abdabd352b13a7c65c8c74daf6a7b15"
-  integrity sha512-nB/xe7JQWF9nLvhHommAICQ3eWrfRETo0EVGFESi952CDzDa+GAJ/2BFBNw44QqQPxj1Xua/uYKrbLsOGWZdbQ==
 
 angular@^1.7.9:
   version "1.7.9"
@@ -712,6 +666,11 @@ builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
+
+bulma@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.8.0.tgz#ac1606431703a4761b18a4a2d5cc1fa864a2aece"
+  integrity sha512-nhf3rGyiZh/VM7FrSJ/5KeLlfaFkXz0nYcXriynfPH4vVpnxnqyEwaNGdNCVzHyyCA3cHgkQAMpdF/SFbFGZfA==
 
 bytes@3.0.0:
   version "3.0.0"

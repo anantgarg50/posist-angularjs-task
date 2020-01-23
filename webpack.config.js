@@ -10,7 +10,7 @@ const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  mode: 'none',
+  mode: 'development',
 
   entry: {
     main: './app/index.ts'
@@ -61,7 +61,8 @@ module.exports = {
   },
 
   devServer: {
-    contentBase: path.resolve(__dirname, 'dist')
+    contentBase: path.resolve(__dirname, 'dist'),
+    historyApiFallback: true
   },
 
   optimization: {
