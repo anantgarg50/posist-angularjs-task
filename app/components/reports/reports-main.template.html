@@ -1,0 +1,43 @@
+<div>
+  <app-header></app-header>
+
+  <div>
+    <section class="section">
+      <div class="container">
+        <p class="title has-text-centered">
+          Reports
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <form>
+        <div class="field is-grouped is-grouped-right">
+          <div class="control">
+            <label class="label">Select Report Type :-</label>
+          </div>
+
+          <div class="control">
+            <div class="select is-small">
+              <select ng-options="option.name for option in $ctrl.reportOptions track by option.id"
+                ng-model="$ctrl.selectedOption" ng-change="$ctrl.updateReportTitle()">
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <section class="section">
+      <div class="table-container">
+        <p class="title has-text-centered">
+          {{ $ctrl.reportTitle }}
+        </p>
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+          <thead id="__reports_table_head"></thead>
+          <tbody id="__reports_table_body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>

@@ -20,7 +20,7 @@ module.exports = {
     rules: [
       {
         test: /.(ts|tsx)?$/,
-        use: 'ts-loader',
+        use: ['ts-loader'],
         include: [path.resolve(__dirname, 'app')],
         exclude: [/node_modules/],
       },
@@ -40,7 +40,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.html'],
   },
 
   plugins: [
