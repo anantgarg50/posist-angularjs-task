@@ -11,21 +11,30 @@
 
   <section class="section">
     <div class="container">
-      <form>
+      <form name="headquarterForm" novalidate ng-submit="$ctrl.createHeadquarter(headquarterForm)">
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
               <label class="label">Name</label>
               <div class="control">
-                <input id="__headquarters_name" class="input" type="text" required placeholder="Headquarter Name" />
+                <input name="name" ng-model="$ctrl.headquarter.name" class="input" type="text" required
+                  placeholder="Headquarter Name" />
+              </div>
+              <div ng-show="headquarterForm.name.$submitted || headquarterForm.name.$touched">
+                <p class="help is-danger" ng-show="headquarterForm.name.$error.required">Headquarter Name is required!
+                </p>
               </div>
             </div>
 
             <div class="field">
               <label class="label">Location</label>
               <div class="control">
-                <input id="__headquarters_location" class="input" type="text" required
+                <input name="location" ng-model="$ctrl.headquarter.location" class="input" type="text" required
                   placeholder="Headquarter location" />
+              </div>
+              <div ng-show="headquarterForm.location.$touched">
+                <p class="help is-danger" ng-show="headquarterForm.location.$error.required">Headquarter Location is
+                  required!</p>
               </div>
             </div>
           </div>
@@ -33,12 +42,12 @@
 
         <div class="field is-grouped is-grouped-right">
           <div class="control">
-            <button class="button is-primary" type="submit">
+            <button class="button is-primary" type="submit" ng-disabled="headquarterForm.$invalid">
               Submit
             </button>
           </div>
           <div class="control">
-            <button class="button is-light" type="reset">
+            <button class="button is-light" type="button" ng-click="$ctrl.resetForm(headquarterForm)">
               Reset
             </button>
           </div>
