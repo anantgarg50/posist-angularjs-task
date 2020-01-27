@@ -11,21 +11,31 @@
 
   <section class="section">
     <div class="container">
-      <form onsubmit="return createRentalCar()">
+      <form name="carForm" novalidate ng-submit="$ctrl.createCar(carForm)">
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
               <label class="label">Manufacturer</label>
               <div class="control">
-                <input id="__rental_cars_manufacturer" class="input" type="text" required
-                  placeholder="Car manufacturer Name" />
+                <input name="manufacturer" class="input" type="text" required placeholder="Car manufacturer Name"
+                  ng-model="$ctrl.car.manufacturer" />
+              </div>
+              <div ng-show="carForm.manufacturer.$submitted || carForm.manufacturer.$touched">
+                <p class="help is-danger" ng-show="carForm.manufacturer.$error.required">Car Manufacturer name is
+                  required!
+                </p>
               </div>
             </div>
 
             <div class="field">
               <label class="label">Model</label>
               <div class="control">
-                <input id="__rental_cars_model" class="input" type="text" required placeholder="Car Model" />
+                <input name="model" class="input" type="text" required placeholder="Car Model"
+                  ng-model="$ctrl.car.model" />
+              </div>
+              <div ng-show="carForm.model.$submitted || carForm.model.$touched">
+                <p class="help is-danger" ng-show="carForm.model.$error.required">Car Model is required!
+                </p>
               </div>
             </div>
 
@@ -33,10 +43,16 @@
               <label class="label">Driver Name</label>
               <div class="control">
                 <div class="select">
-                  <select id="__rental_cars_driven_by" required>
+                  <select name="drivenBy" required ng-model="$ctrl.car.drivenBy">
                     <option value="">Assign Driver...</option>
+                    <option ng-repeat="driver in $ctrl.driversList" value="{{driver._id}}">{{driver.name}}</option>
                   </select>
                 </div>
+              </div>
+              <div ng-show="carForm.drivenBy.$submitted || carForm.drivenBy.$touched">
+                <p class="help is-danger" ng-show="carForm.drivenBy.$error.required">Please select a driver from the
+                  list!
+                </p>
               </div>
             </div>
 
@@ -44,10 +60,19 @@
               <label class="label">Operated By</label>
               <div class="control">
                 <div class="select">
-                  <select id="__rental_cars_operated_by" required>
+                  <select name="operatedBy" required ng-model="$ctrl.car.operatedBy">
                     <option value="">Select Branch Name...</option>
+                    <option ng-repeat="branch in $ctrl.branchesList" value="{{branch._id}}">
+                      {{branch.name + " (" + branch.location + ")"}}</option>
+                  </select>
                   </select>
                 </div>
+              </div>
+              <div ng-show="carForm.operatedBy.$submitted || carForm.operatedBy.$touched">
+                <p class="help is-danger" ng-show="carForm.operatedBy.$error.required">Please select a branch from
+                  the
+                  list!
+                </p>
               </div>
             </div>
           </div>
@@ -58,32 +83,57 @@
             <div class="field">
               <label class="label">Seating Capacity</label>
               <div class="control">
-                <input id="__rental_cars_seating_capacity" class="input" type="number" required
-                  placeholder="Seating Capacity excluding Driver" />
+                <input name="seatingCapacity" class="input" type="number" required
+                  placeholder="Seating Capacity excluding Driver" ng-model="$ctrl.car.seatingCapacity" min="1" />
+              </div>
+              <div ng-show="carForm.seatingCapacity.$submitted || carForm.seatingCapacity.$touched">
+                <p class="help is-danger" ng-show="carForm.seatingCapacity.$error.required">Seating Capacity is
+                  required!
+                </p>
+                <p class="help is-danger" ng-show="carForm.seatingCapacity.$error.min">
+                  Seating Capacity must be greater than 0!</p>
               </div>
             </div>
 
-            <div class="field">
+            <div class=" field">
               <label class="label">Cost(in ₹) Per KM</label>
               <div class="control">
-                <input id="__rental_cars_rate_per_kilometer" class="input" type="number" required
-                  placeholder="Cost(in ₹) Per KM" />
+                <input name="ratePerKilometer" class="input" type="number" required placeholder="Cost(in ₹) Per KM"
+                  ng-model="$ctrl.car.ratePerKilometer" min="1" />
+              </div>
+              <div ng-show="carForm.ratePerKilometer.$submitted || carForm.ratePerKilometer.$touched">
+                <p class="help is-danger" ng-show="carForm.ratePerKilometer.$error.required">Rate Per Kilometer is
+                  required!
+                </p>
+                <p class="help is-danger" ng-show="carForm.ratePerKilometer.$error.min">
+                  Rate Per Kilometer must be greater than 0!</p>
               </div>
             </div>
 
             <div class="field">
               <label class="label">Hourly Rate(in ₹)</label>
               <div class="control">
-                <input id="__rental_cars_hourly_rate" class="input" type="number" required
-                  placeholder="Hourly Rate(in ₹)" />
+                <input name="hourlyRate" class="input" type="number" required placeholder="Hourly Rate(in ₹)"
+                  ng-model="$ctrl.car.hourlyRate" min="1" />
+              </div>
+              <div ng-show="carForm.hourlyRate.$submitted || carForm.hourlyRate.$touched">
+                <p class="help is-danger" ng-show="carForm.hourlyRate.$error.required">Hourly Rate is required!
+                </p>
+                <p class="help is-danger" ng-show="carForm.hourlyRate.$error.min">
+                  Hourly Rate must be greater than 0!</p>
               </div>
             </div>
 
             <div class="field">
               <label class="label">Car Registration Number</label>
               <div class="control">
-                <input id="__rental_cars_reg_number" class="input" type="Text" required
-                  placeholder="Car Registration Number" />
+                <input name="carRegNumber" class="input" type="Text" required placeholder="Car Registration Number"
+                  ng-model="$ctrl.car.carRegNumber" />
+              </div>
+              <div ng-show="carForm.carRegNumber.$submitted || carForm.carRegNumber.$touched">
+                <p class="help is-danger" ng-show="carForm.carRegNumber.$error.required">Car Registration Number is
+                  required!
+                </p>
               </div>
             </div>
           </div>
@@ -91,12 +141,12 @@
 
         <div class="field is-grouped is-grouped-right">
           <div class="control">
-            <button class="button is-primary" type="submit">
+            <button class="button is-primary" type="submit" ng-disabled="carForm.$invalid">
               Submit
             </button>
           </div>
           <div class="control">
-            <button class="button is-light" type="reset">
+            <button class="button is-light" type="button" ng-click="$ctrl.resetForm(carForm)">
               Reset
             </button>
           </div>
@@ -120,7 +170,18 @@
             <th scope="col">Operated By</th>
           </tr>
         </thead>
-        <tbody id="__rental_cars_table"></tbody>
+        <tbody>
+          <tr ng-repeat="car in $ctrl.carsList">
+            <th scope="row">{{$index + 1 + "."}}</th>
+            <td>{{car.carRegNumber}}</td>
+            <td>{{car.manufacturer + " " + car.model}}</td>
+            <td>{{car.seatingCapacity}}</td>
+            <td>{{car.drivenBy.name}}</td>
+            <td>{{car.ratePerKilometer}}</td>
+            <td>{{car.hourlyRate}}</td>
+            <td>{{car.operatedBy.name + " (" + car.operatedBy.location + ")"}}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </section>

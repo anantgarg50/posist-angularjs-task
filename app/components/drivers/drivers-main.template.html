@@ -11,28 +11,44 @@
 
   <section class="section">
     <div class="container">
-      <form onsubmit="createCarDriver()">
+      <form name="driverForm" novalidate ng-submit="$ctrl.createDriver(driverForm)">
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
               <label class="label">Name</label>
               <div class="control">
-                <input id="__car_drivers_name" class="input" type="text" required placeholder="Name" />
+                <input name="name" class="input" type="text" required placeholder="Name" ng-model="$ctrl.driver.name" />
+              </div>
+              <div ng-show="driverForm.name.$submitted || driverForm.name.$touched">
+                <p class="help is-danger" ng-show="driverForm.name.$error.required">Driver Name is required!
+                </p>
               </div>
             </div>
 
             <div class="field">
               <label class="label">Age</label>
               <div class="control">
-                <input id="__car_drivers_age" class="input" type="number" required placeholder="Age" />
+                <input name="age" class="input" type="number" required placeholder="Age" ng-model="$ctrl.driver.age"
+                  min="18" max="60" />
+              </div>
+              <div ng-show="driverForm.age.$submitted || driverForm.age.$touched">
+                <p class="help is-danger" ng-show="driverForm.age.$error.required">Driver Age is required!
+                </p>
+                <p class="help is-danger" ng-show="driverForm.age.$error.min || driverForm.age.$error.max">
+                  Age must be between 18 and 60!</p>
               </div>
             </div>
 
             <div class="field">
               <label class="label">Permanent Address</label>
               <div class="control">
-                <input id="__car_drivers_permanent_address" class="input" type="text" required
-                  placeholder="Permanent Address" />
+                <input name="permanentAddress" class="input" type="text" required placeholder="Permanent Address"
+                  ng-model="$ctrl.driver.permanentAddress" />
+              </div>
+              <div ng-show="driverForm.permanentAddress.$submitted || driverForm.permanentAddress.$touched">
+                <p class="help is-danger" ng-show="driverForm.permanentAddress.$error.required">Permanent Address is
+                  required!
+                </p>
               </div>
             </div>
           </div>
@@ -40,12 +56,12 @@
 
         <div class="field is-grouped is-grouped-right">
           <div class="control">
-            <button class="button is-primary" type="submit">
+            <button class="button is-primary" type="submit" ng-disabled="driverForm.$invalid">
               Submit
             </button>
           </div>
           <div class="control">
-            <button class="button is-light" type="reset">
+            <button class="button is-light" type="button" ng-click="$ctrl.resetForm(driverForm)">
               Reset
             </button>
           </div>
@@ -66,7 +82,15 @@
             <th scope="col">Assigned Car</th>
           </tr>
         </thead>
-        <tbody id="__car_drivers_table"></tbody>
+        <tbody>
+          <tr ng-repeat="driver in $ctrl.driversList">
+            <th scope="row">{{$index + 1 + "."}}</th>
+            <td>{{driver.name}}</td>
+            <td>{{driver.age}}</td>
+            <td>{{driver.permanentAddress}}</td>
+            <td>{{driver.assignedCar ? driver.assignedCar.name : "N/A"}}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </section>

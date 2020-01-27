@@ -1,29 +1,35 @@
 import angular from 'angular';
 
+import { HeadquartersService } from '../../services/headquarters-service';
+
 interface Headquarter {
+  _id?: string,
   name: string,
-  location: string
+  location: string,
+  branches: object[]
 }
 
 export class HeadquartersMainController {
   static $inject = ['headquartersService'];
 
+  public headquartersList: Headquarter[];
   public initialValue: Headquarter = {
     name: undefined,
-    location: undefined
+    location: undefined,
+    branches: []
   };
-  public headquarter: Headquarter = {
-    name: undefined,
-    location: undefined
-  };
+  public headquarter: Headquarter = angular.copy(this.initialValue);
 
-  constructor(private headquartersService: any) { }
+  constructor(private headquartersService: HeadquartersService) {
+    this.headquartersList = headquartersService.getList();
+  }
 
   createHeadquarter(headquarterForm: angular.IFormController) {
     if (!headquarterForm.$valid) {
       return;
     }
-    console.log(this.headquarter);
+
+    this.headquartersService.save(this.headquarter);
 
     this.resetForm(headquarterForm);
   }

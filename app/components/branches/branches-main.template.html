@@ -11,20 +11,30 @@
 
   <section class="section">
     <div class="container">
-      <form onsubmit="return createBranch()">
+      <form name="branchForm" novalidate ng-submit="$ctrl.createBranch(branchForm)">
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
               <label class="label">Name</label>
               <div class="control">
-                <input id="__branches_name" class="input" type="text" required placeholder="Branch Name" />
+                <input name="name" class="input" type="text" required placeholder="Branch Name"
+                  ng-model="$ctrl.branch.name" />
+              </div>
+              <div ng-show="branchForm.name.$submitted || branchForm.name.$touched">
+                <p class="help is-danger" ng-show="branchForm.name.$error.required">Branch Name is required!
+                </p>
               </div>
             </div>
 
             <div class="field">
               <label class="label">Location</label>
               <div class="control">
-                <input id="__branches_location" class="input" type="text" required placeholder="Branch location" />
+                <input name="location" class="input" type="text" required placeholder="Branch location"
+                  ng-model="$ctrl.branch.location" />
+              </div>
+              <div ng-show="branchForm.location.$submitted || branchForm.location.$touched">
+                <p class="help is-danger" ng-show="branchForm.location.$error.required">Branch Location is required!
+                </p>
               </div>
             </div>
 
@@ -32,10 +42,16 @@
               <label class="label">Headquarter Name</label>
               <div class="control">
                 <div class="select">
-                  <select id="__branches_headquarter" required>
+                  <select name="headquarter" ng-model="$ctrl.branch.headquarter" required>
                     <option value="">Select Headquarter...</option>
+                    <option ng-repeat="headquarter in $ctrl.headquartersList" value="{{headquarter._id}}">
+                      {{headquarter.name + ", " + headquarter.location}}</option>
                   </select>
                 </div>
+              </div>
+              <div ng-show="branchForm.headquarter.$submitted || branchForm.headquarter.$touched">
+                <p class="help is-danger" ng-show="branchForm.headquarter.$error.required">Please select a Headquarter!
+                </p>
               </div>
             </div>
           </div>
@@ -43,12 +59,12 @@
 
         <div class="field is-grouped is-grouped-right">
           <div class="control">
-            <button class="button is-primary" type="submit">
+            <button class="button is-primary" type="submit" ng-disabled="branchForm.$invalid">
               Submit
             </button>
           </div>
           <div class="control">
-            <button class="button is-light" type="reset">
+            <button class="button is-light" type="button" ng-click="$ctrl.resetForm(branchForm)">
               Reset
             </button>
           </div>
@@ -69,7 +85,15 @@
             <th scope="col">No. of Operational Cars</th>
           </tr>
         </thead>
-        <tbody id="__branches_table"></tbody>
+        <tbody>
+          <tr ng-repeat="branch in $ctrl.branchesList">
+            <th scope="row">{{$index + 1 + "."}}</th>
+            <td>{{branch.name}}</td>
+            <td>{{branch.location}}</td>
+            <td>{{branch.headquarter.name + ", " + branch.headquarter.location}}</td>
+            <td>{{branch.cars.length}}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </section>
