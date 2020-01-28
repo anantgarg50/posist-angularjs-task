@@ -11,20 +11,32 @@
 
   <section class="section">
     <div class="container">
-      <form onsubmit="return createBooking()">
+      <form name="bookingForm" novalidate ng-submit="$ctrl.createBooking(bookingForm)">
         <div class="field is-horizontal">
           <div class="field-body">
             <div class="field">
               <label class="label">Customer Name</label>
               <div class="control">
-                <input id="__bookings_customer_name" class="input" type="text" required placeholder="Customer Name" />
+                <input name="customerName" class="input" type="text" required placeholder="Customer Name"
+                  ng-model="$ctrl.booking.customerName" />
+              </div>
+              <div ng-show="bookingForm.customerName.$submitted || bookingForm.customerName.$touched">
+                <p class="help is-danger" ng-show="bookingForm.customerName.$error.required">Customer Name is
+                  required!
+                </p>
               </div>
             </div>
 
             <div class="field">
               <label class="label">Pickup Address</label>
               <div class="control">
-                <input id="__bookings_pickup_address" class="input" type="text" required placeholder="Pickup Address" />
+                <input name="pickupAddress" class="input" type="text" required placeholder="Pickup Address"
+                  ng-model="$ctrl.booking.pickupAddress" />
+              </div>
+              <div ng-show="bookingForm.pickupAddress.$submitted || bookingForm.pickupAddress.$touched">
+                <p class="help is-danger" ng-show="bookingForm.pickupAddress.$error.required">Pickup Address is
+                  required!
+                </p>
               </div>
             </div>
           </div>
@@ -35,8 +47,13 @@
             <div class="field">
               <label class="label">Start Time</label>
               <div class="control">
-                <input id="__bookings_start_time" class="input" type="datetime-local" required
-                  placeholder="Booking Start Time" />
+                <input name="startTime" class="input" type="datetime-local" required placeholder="Booking Start Time"
+                  ng-model="$ctrl.booking.startTime" />
+              </div>
+              <div ng-show="bookingForm.startTime.$submitted || bookingForm.startTime.$touched">
+                <p class="help is-danger" ng-show="bookingForm.startTime.$error.required">Booking Start Time is
+                  required!
+                </p>
               </div>
             </div>
 
@@ -44,48 +61,53 @@
               <label class="label">Select Service</label>
               <div class="control">
                 <div class="select">
-                  <select id="__bookings_service" required>
+                  <select name="branch" required ng-model="$ctrl.booking.branch" ng-change="$ctrl.branchSelected()">
                     <option value="">Select Service...</option>
+                    <option ng-repeat=" branch in $ctrl.branchesList" value="{{branch._id}}">
+                      {{branch.name + " (" + branch.location + ")"}}</option>
                   </select>
+                </div>
+                <div ng-show="bookingForm.branch.$submitted || bookingForm.branch.$touched">
+                  <p class="help is-danger" ng-show="bookingForm.branch.$error.required">Please select a service from
+                    list!
+                  </p>
                 </div>
               </div>
             </div>
 
             <div class="field">
               <label class="label">Select Car</label>
-              <div class="field-body">
-                <div class="field is-grouped">
-                  <div class="control">
-                    <div class="select">
-                      <select id="__bookings_car_booked" required>
-                        <option value="">Select Car...</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="control">
-                    <button class="button is-info" type="button" onclick="populateBookingCarsSelectOptions()">
-                      Get Available Cars
-                    </button>
-                  </div>
+              <div class="control">
+                <div class="select">
+                  <select name="carBooked" required ng-model="$ctrl.booking.carBooked">
+                    <option value="">Select Car...</option>
+                    <option ng-repeat="car in $ctrl.availableCars" value="{{car._id}}">
+                      {{car.name}}</option>
+                  </select>
                 </div>
               </div>
-              <p class="help is-info">
-                Select service before getting available cars.
-              </p>
+              <div ng-show="bookingForm.branch.$submitted || bookingForm.branch.$touched">
+                <p class="help is-info" ng-show="bookingForm.branch.$error.required">Please select a service first!
+                </p>
+              </div>
+              <div ng-show="bookingForm.carBooked.$submitted || bookingForm.carBooked.$touched">
+                <p class="help is-danger" ng-show="bookingForm.carBooked.$error.required">Please select a car from
+                  list!
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="field is-grouped is-grouped-right">
           <div class="control">
-            <button class="button is-primary" type="submit">
+            <button class="button is-primary" type="submit" ng-disabled="bookingForm.$invalid">
               Submit
             </button>
           </div>
 
           <div class="control">
-            <button class="button is-light" type="reset">
+            <button class="button is-light" type="button" ng-click="$ctrl.resetForm(bookingForm)">
               Reset
             </button>
           </div>
@@ -112,7 +134,23 @@
             <th scope="col">Actions</th>
           </tr>
         </thead>
-        <tbody id="__bookings_current_bookings_table"></tbody>
+        <tbody>
+          <tr ng-repeat="booking in $ctrl.currentBookings">
+            <th scope="row">{{$index + 1 + "."}}</th>
+            <td>{{booking.customerName}}</td>
+            <td>{{booking.branch.name + " (" + booking.branch.location +")"}}</td>
+            <td>{{booking.carBooked.name + " (" + booking.carBooked.carRegNumber +")"}}</td>
+            <td>{{booking.driverDetails.name}}</td>
+            <td>{{booking.pickupAddress}}</td>
+            <td>{{booking.startTime}}</td>
+            <td>
+              <button class="button is-success is-small" ng-click="$ctrl.toggleEndBookingModal(null, booking._id)">
+                <span>End Booking</span>
+                <span class="icon is-small"><i class="fas fa-check"></i></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </section>
@@ -137,31 +175,56 @@
             <th scope="col">Billed Amount(in ₹)</th>
           </tr>
         </thead>
-        <tbody id="__bookings_ended_bookings_table"></tbody>
+        <tbody>
+          <tr ng-repeat="booking in $ctrl.endedBookings">
+            <th scope="row">{{$index + 1 + "."}}</th>
+            <td>{{booking.customerName}}</td>
+            <td>{{booking.branch.name + " (" + booking.branch.location +")"}}</td>
+            <td>{{booking.carBooked.name + " (" + booking.carBooked.carRegNumber +")"}}</td>
+            <td>{{booking.driverDetails.name}}</td>
+            <td>{{booking.pickupAddress}}</td>
+            <td>{{booking.startTime}}</td>
+            <td>{{booking.endTime}}</td>
+            <td>{{booking.kmsTravelled}}</td>
+            <td>{{booking.billedAmount}}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </section>
 
-  <div id="__bookings_end_booking_form_modal" class="modal">
-    <div class="modal-background" onclick="closeEndBookingFormModal()"></div>
+  <div id="__bookings_end_booking_form_modal" class="modal is-active is-clipped" ng-show="$ctrl.endBookingModalVisible">
+    <div class="modal-background" ng-click="$ctrl.toggleEndBookingModal(endBookingForm)"></div>
     <div class="modal-content">
       <div class="box">
-        <form id="__bookings_end_booking_form" onsubmit="return completeBooking()">
+        <form name="endBookingForm" ng-submit="$ctrl.completeBooking(endBookingForm)">
           <div class="field is-horizontal">
             <div class="field-body">
               <div class="field">
                 <label class="label">End Time</label>
                 <div class="control">
-                  <input id="__bookings_end_time" class="input" type="datetime-local" required
-                    placeholder="Booking End Time" />
+                  <input name="endTime" class="input" type="datetime-local" required placeholder="Booking End Time"
+                    ng-model="$ctrl.endBooking.endTime" />
+                </div>
+                <div ng-show="endBookingForm.endTime.$submitted || endBookingForm.endTime.$touched">
+                  <p class="help is-danger" ng-show="endBookingForm.endTime.$error.required">Booking End Time is
+                    required!
+                  </p>
                 </div>
               </div>
 
               <div class="field">
                 <label class="label">KMs Travelled</label>
                 <div class="control">
-                  <input id="__bookings_kms_travelled" class="input" type="number" required
-                    placeholder="Total KMs Travelled" />
+                  <input name="kmsTravelled" class="input" type="number" required placeholder="Total KMs Travelled"
+                    ng-model="$ctrl.endBooking.kmsTravelled" min="0" />
+                </div>
+                <div ng-show="endBookingForm.kmsTravelled.$submitted || endBookingForm.kmsTravelled.$touched">
+                  <p class="help is-danger" ng-show="endBookingForm.kmsTravelled.$error.required">KMs Travelled is
+                    required!
+                  </p>
+                  <p class="help is-danger" ng-show="endBookingForm.kmsTravelled.$error.min">
+                    KMs Travelled must be greater than 0!</p>
                 </div>
               </div>
             </div>
@@ -169,13 +232,13 @@
 
           <div class="field is-grouped is-grouped-right">
             <div class="control">
-              <button class="button is-primary" type="submit">
+              <button class="button is-primary" type="submit" ng-disabled="endBookingForm.$invalid">
                 End Ride
               </button>
             </div>
 
             <div class="control">
-              <button class="button is-light" type="reset">
+              <button class="button is-light" type="button" ng-click="$ctrl.resetForm(endBookingForm)">
                 Reset
               </button>
             </div>
@@ -183,6 +246,7 @@
         </form>
       </div>
     </div>
-    <button class="modal-close is-large" onclick="closeEndBookingFormModal()" aria-label="close"></button>
+    <button class="modal-close is-large" ng-click="$ctrl.toggleEndBookingModal(endBookingForm)"
+      aria-label="close"></button>
   </div>
 </div>
