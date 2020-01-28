@@ -142,7 +142,7 @@
             <td>{{booking.carBooked.name + " (" + booking.carBooked.carRegNumber +")"}}</td>
             <td>{{booking.driverDetails.name}}</td>
             <td>{{booking.pickupAddress}}</td>
-            <td>{{booking.startTime}}</td>
+            <td>{{booking.startTime | date: 'dd/MM/yyyy @ hh:mma'}}</td>
             <td>
               <button class="button is-success is-small" ng-click="$ctrl.toggleEndBookingModal(null, booking._id)">
                 <span>End Booking</span>
@@ -183,8 +183,8 @@
             <td>{{booking.carBooked.name + " (" + booking.carBooked.carRegNumber +")"}}</td>
             <td>{{booking.driverDetails.name}}</td>
             <td>{{booking.pickupAddress}}</td>
-            <td>{{booking.startTime}}</td>
-            <td>{{booking.endTime}}</td>
+            <td>{{booking.startTime | date: 'dd/MM/yyyy @ hh:mma'}}</td>
+            <td>{{booking.endTime | date: 'dd/MM/yyyy @ hh:mma'}}</td>
             <td>{{booking.kmsTravelled}}</td>
             <td>{{booking.billedAmount}}</td>
           </tr>
