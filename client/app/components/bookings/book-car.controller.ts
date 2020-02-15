@@ -52,7 +52,7 @@ interface Driver {
   bookings: any[]
 }
 
-export class BookingsMainController {
+export class BookCarController {
   static $inject = ['bookingsService', 'carsService', 'branchesService', 'driversService'];
 
   public endBookingModalVisible: boolean = false;
@@ -206,8 +206,6 @@ export class BookingsMainController {
     driver.bookings[driverBookingIndex].kmsTravelled = booking.kmsTravelled;
     this.driversService.update(driver._id, driver);
 
-    console.log(bookedCarIndex, branchBookingIndex, carBookingIndex, driverBookingIndex);
-
     this.toggleEndBookingModal(endBookingForm);
     this.setTableData();
   }
@@ -242,4 +240,4 @@ export class BookingsMainController {
   }
 };
 
-export default BookingsMainController;
+export default BookCarController;

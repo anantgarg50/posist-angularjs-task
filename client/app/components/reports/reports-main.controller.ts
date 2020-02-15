@@ -205,8 +205,6 @@ export class ReportsMainController {
       default:
         break;
     }
-
-    console.log(this.tableData);
   }
 };
 

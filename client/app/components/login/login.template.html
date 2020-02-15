@@ -1,0 +1,60 @@
+<section class="hero is-light is-bold is-fullheight">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+          <form action="" class="box">
+            <div class="field">
+              <div class="container has-text-centered">
+                <h1 class="title">
+                  Login
+                </h1>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="" class="label">Email</label>
+              <div class="control has-icons-left">
+                <input type="email" placeholder="e.g. bobsmith@gmail.com" class="input" required>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-envelope"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="" class="label">Password</label>
+              <div class="control has-icons-left">
+                <input type="password" placeholder="*******" class="input" required>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-lock"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field is-grouped is-grouped-centered">
+              <div class="control">
+                <button class="button is-primary" type="submit">
+                  Login
+                </button>
+              </div>
+              <div class="control">
+                <button class="button is-light" type="reset">
+                  Cancel
+                </button>
+              </div>
+            </div>
+            <div class="field is-grouped is-grouped-centered">
+              <div class="control">
+                <button class="button is-info" type="button" ng-click="$ctrl.login()">
+                  <span class="icon">
+                    <i class="fab fa-google"></i>
+                  </span>
+                  <span>Google</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
