@@ -5,8 +5,6 @@ const schema = new mongoose.Schema(
     name: String,
     email: String,
     password: String,
-    token: String,
-    picture: String,
     type: String
   },
   {

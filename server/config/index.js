@@ -7,6 +7,9 @@ const PORT = port
     ? 3000
     : 5000;
 
+const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/posist-angularjs-task';
+
 module.exports = {
-  PORT
+  PORT,
+  DB_URL
 };
