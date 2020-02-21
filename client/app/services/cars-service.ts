@@ -1,32 +1,33 @@
-import { StorageService } from './storage-service';
-
 export class CarsService {
-  static $inject = ['storageService'];
+  static $inject = ['$http', 'API_URL'];
 
-  private DB_NAME = 'cars';
+  constructor(private $http: ng.IHttpService, private API_URL: string) { }
 
-  constructor(private storageService: StorageService) {
-    const data = storageService.getAll(this.DB_NAME);
-
-    if (!Array.isArray(data)) {
-      storageService.setAll(this.DB_NAME, []);
+  async create(data: Car) {
+    try {
+      await this.$http.post(`${this.API_URL}/car/create`, {
+        manufacturer: data.manufacturer,
+        model: data.model,
+        seatingCapacity: data.seatingCapacity,
+        ratePerKilometer: data.ratePerKilometer,
+        hourlyRate: data.hourlyRate,
+        carRegNumber: data.carRegNumber,
+        operatedBy: data.operatedBy,
+        drivenBy: data.drivenBy
+      });
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  save(data: object) {
-    return this.storageService.saveEntry(this.DB_NAME, data);
-  }
+  async getList(): Promise<Car[] | any> {
+    try {
+      const response = await this.$http.get(`${this.API_URL}/car/list`);
 
-  update(_id: string, data: object) {
-    return this.storageService.updateEntry(this.DB_NAME, _id, data);
-  }
-
-  get(_id: string) {
-    return this.storageService.getEntry(this.DB_NAME, _id);
-  }
-
-  getList() {
-    return this.storageService.getAll(this.DB_NAME);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 

@@ -1,19 +1,21 @@
 const router = require('express').Router();
 
-const usersRoutes = require('./users');
-const headquartersRoutes = require('./headquarters');
-const branchesRoutes = require('./branches');
-const carsRoutes = require('./cars');
-const driversRoutes = require('./drivers');
-const bookingsRoutes = require('./bookings');
+const authRoutes = require('./auth');
+const userRoutes = require('./user');
+const headquarterRoutes = require('./headquarter');
+const branchRoutes = require('./branch');
+const carRoutes = require('./car');
+const driverRoutes = require('./driver');
+const bookingRoutes = require('./booking');
 const reportsRoutes = require('./reports');
 
-router.use('/users', usersRoutes);
-router.use('/headquarters', headquartersRoutes);
-router.use('/branches', branchesRoutes);
-router.use('/cars', carsRoutes);
-router.use('/drivers', driversRoutes);
-router.use('/bookings', bookingsRoutes);
+router.use('/auth', authRoutes);
+router.use('/user', userRoutes);
+router.use('/headquarter', headquarterRoutes);
+router.use('/branch', branchRoutes);
+router.use('/car', carRoutes);
+router.use('/driver', driverRoutes);
+router.use('/booking', bookingRoutes);
 router.use('/reports', reportsRoutes);
 
 module.exports = router;

@@ -2,40 +2,42 @@ import angular from 'angular';
 
 import { DriversService } from '../../services/drivers-service';
 
-interface Driver {
-  _id?: string,
-  name: string,
-  age: number,
-  permanentAddress: string,
-  assignedCar: object,
-  bookings: object[]
-}
-
 export class DriversMainController {
-  static $inject = ['driversService'];
+  static $inject = ['$scope', '$timeout', 'driversService'];
 
   public driversList: Driver[];
   public initialValue: Driver = {
     name: undefined,
     age: undefined,
-    permanentAddress: undefined,
-    assignedCar: undefined,
-    bookings: []
+    permanentAddress: undefined
   };
   public driver: Driver = angular.copy(this.initialValue);
 
-  constructor(private driversService: DriversService) {
-    this.driversList = driversService.getList();
+  constructor(
+    private $scope: ng.IScope,
+    private $timeout: ng.ITimeoutService,
+    private driversService: DriversService
+  ) {
+    this.populateDriversList();
   }
 
-  createDriver(driverForm: angular.IFormController) {
+  populateDriversList() {
+    this.$timeout(async () => {
+      this.driversList = await this.driversService.getList();
+
+      this.$scope.$digest();
+    });
+  }
+
+  async createDriver(driverForm: angular.IFormController) {
     if (!driverForm.$valid) {
       return;
     }
 
-    this.driversService.save(this.driver);
+    await this.driversService.create(this.driver);
 
     this.resetForm(driverForm);
+    this.populateDriversList();
   }
 
   resetForm(driverForm: angular.IFormController) {

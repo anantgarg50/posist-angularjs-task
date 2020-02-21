@@ -3,7 +3,7 @@
     <div class="container">
       <div class="columns is-centered">
         <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-          <form action="" class="box">
+          <form name="loginForm" class="box" novalidate ng-submit="$ctrl.login(loginForm)">
             <div class="field">
               <div class="container has-text-centered">
                 <h1 class="title">
@@ -13,42 +13,44 @@
             </div>
 
             <div class="field">
-              <label for="" class="label">Email</label>
+              <label class="label">Email</label>
               <div class="control has-icons-left">
-                <input type="email" placeholder="e.g. bobsmith@gmail.com" class="input" required>
+                <input name="email" type="email" placeholder="e.g. bobsmith@gmail.com" class="input" required
+                  ng-model="$ctrl.userData.email">
                 <span class="icon is-small is-left">
                   <i class="fa fa-envelope"></i>
                 </span>
               </div>
+              <div ng-show="loginForm.email.$submitted || loginForm.email.$touched">
+                <p class="help is-danger" ng-show="loginForm.email.$error.required">Email is required!
+                </p>
+              </div>
             </div>
+
             <div class="field">
-              <label for="" class="label">Password</label>
+              <label class="label">Password</label>
               <div class="control has-icons-left">
-                <input type="password" placeholder="*******" class="input" required>
+                <input name="password" type="password" placeholder="*******" class="input" required
+                  ng-model="$ctrl.userData.password">
                 <span class="icon is-small is-left">
                   <i class="fa fa-lock"></i>
                 </span>
               </div>
+              <div ng-show="loginForm.password.$submitted || loginForm.password.$touched">
+                <p class="help is-danger" ng-show="loginForm.password.$error.required">Password is required!
+                </p>
+              </div>
             </div>
+
             <div class="field is-grouped is-grouped-centered">
               <div class="control">
-                <button class="button is-primary" type="submit">
+                <button class="button is-primary" type="submit" ng-disabled="loginForm.$invalid">
                   Login
                 </button>
               </div>
               <div class="control">
-                <button class="button is-light" type="reset">
+                <button class="button is-light" type="reset" ng-click="$ctrl.resetForm(loginForm)">
                   Cancel
-                </button>
-              </div>
-            </div>
-            <div class="field is-grouped is-grouped-centered">
-              <div class="control">
-                <button class="button is-info" type="button" ng-click="$ctrl.login()">
-                  <span class="icon">
-                    <i class="fab fa-google"></i>
-                  </span>
-                  <span>Google</span>
                 </button>
               </div>
             </div>

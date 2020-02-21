@@ -3,14 +3,25 @@ import { app } from './app.module';
 
 angular
   .module(app)
-  .constant('API', 'http://localhost:5000')
+  .constant('API_URL', 'http://localhost:5000/api')
   .config([
     '$routeProvider',
     '$locationProvider',
-    function config($routeProvider: ng.route.IRouteProvider, $locationProvider: any) {
+    '$httpProvider',
+    function config(
+      $routeProvider: ng.route.IRouteProvider,
+      $locationProvider: ng.ILocationProvider,
+      $httpProvider: ng.IHttpProvider
+    ) {
       $routeProvider
+        .when('/', {
+          template: '<main-dashboard></main-dashboard>'
+        })
         .when('/login', {
           template: '<login></login>'
+        })
+        .when('/register', {
+          template: '<register></register>'
         })
         .when('/admin', {
           template: '<admin-dashboard></admin-dashboard>'
@@ -40,10 +51,12 @@ angular
           template: '<book-car></book-car>'
         })
         .otherwise({
-          redirectTo: '/login'
+          redirectTo: '/'
         });
 
       $locationProvider.html5Mode(true);
+
+      $httpProvider.interceptors.push('httpInterceptor');
     }
   ]);
   // .run([

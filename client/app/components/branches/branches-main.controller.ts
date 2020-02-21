@@ -2,68 +2,54 @@ import angular from 'angular';
 
 import { BranchesService } from '../../services/branches-service';
 import { HeadquartersService } from '../../services/headquarters-service';
-
-interface Branch {
-  _id?: string,
-  name: string,
-  location: string,
-  headquarter: any,
-  cars: object[],
-  bookings: object[]
-}
-
-interface Headquarter {
-  _id?: string,
-  name: string,
-  location: string,
-  branches: object[]
-}
-
 export class BranchesMainController {
-  static $inject = ['branchesService', 'headquartersService'];
+  static $inject = ['$scope', '$timeout', 'branchesService', 'headquartersService'];
 
   public headquartersList: Headquarter[];
   public branchesList: Branch[];
   public initialValue: Branch = {
     name: undefined,
     location: undefined,
-    headquarter: undefined,
-    cars: [],
-    bookings: []
+    headquarter: undefined
   };
   public branch: Branch = angular.copy(this.initialValue);
 
   constructor(
+    private $scope: ng.IScope,
+    private $timeout: ng.ITimeoutService,
     private branchesService: BranchesService,
-    private headquartersService: HeadquartersService
+    private headquartersService: HeadquartersService,
   ) {
-    this.branchesList = branchesService.getList();
-    this.headquartersList = headquartersService.getList();
+    this.populateHeadquartersList();
+
+    this.populateBranchesList();
   }
 
-  createBranch(branchForm: angular.IFormController) {
+  populateHeadquartersList() {
+    this.$timeout(async () => {
+      this.headquartersList = await this.headquartersService.getList();
+
+      this.$scope.$digest();
+    });
+  }
+
+  populateBranchesList() {
+    this.$timeout(async () => {
+      this.branchesList = await this.branchesService.getList();
+
+      this.$scope.$digest();
+    });
+  }
+
+  async createBranch(branchForm: angular.IFormController) {
     if (!branchForm.$valid) {
       return;
     }
 
-    const headquarter: Headquarter = this.headquartersService.get(this.branch.headquarter);
-    this.branch.headquarter = {
-      _id: headquarter._id,
-      name: headquarter.name,
-      location: headquarter.location
-    };
-
-    const saved: Branch = this.branchesService.save(this.branch);
-
-    headquarter.branches.push({
-      _id: saved._id,
-      name: saved.name,
-      location: saved.location
-    });
-
-    this.headquartersService.update(headquarter._id, headquarter);
+    await this.branchesService.create(this.branch);
 
     this.resetForm(branchForm);
+    this.populateBranchesList();
   }
 
   resetForm(branchForm: angular.IFormController) {

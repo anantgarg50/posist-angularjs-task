@@ -83,7 +83,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="driver in $ctrl.driversList">
+          <tr ng-repeat="driver in $ctrl.driversList track by $index">
             <th scope="row">{{$index + 1 + "."}}</th>
             <td>{{driver.name}}</td>
             <td>{{driver.age}}</td>

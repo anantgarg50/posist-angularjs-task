@@ -45,7 +45,9 @@
                 <div class="select">
                   <select name="drivenBy" required ng-model="$ctrl.car.drivenBy">
                     <option value="">Assign Driver...</option>
-                    <option ng-repeat="driver in $ctrl.driversList" value="{{driver._id}}">{{driver.name}}</option>
+                    <option ng-repeat="driver in $ctrl.unallocatedDriversList track by $index" value="{{driver._id}}">
+                      {{driver.name}}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -62,7 +64,7 @@
                 <div class="select">
                   <select name="operatedBy" required ng-model="$ctrl.car.operatedBy">
                     <option value="">Select Branch Name...</option>
-                    <option ng-repeat="branch in $ctrl.branchesList" value="{{branch._id}}">
+                    <option ng-repeat="branch in $ctrl.branchesList track by $index" value="{{branch._id}}">
                       {{branch.name + " (" + branch.location + ")"}}</option>
                   </select>
                   </select>
@@ -171,7 +173,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="car in $ctrl.carsList">
+          <tr ng-repeat="car in $ctrl.carsList track by $index">
             <th scope="row">{{$index + 1 + "."}}</th>
             <td>{{car.carRegNumber}}</td>
             <td>{{car.manufacturer + " " + car.model}}</td>

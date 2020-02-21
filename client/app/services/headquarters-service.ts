@@ -1,32 +1,27 @@
-import { StorageService } from './storage-service';
-
 export class HeadquartersService {
-  static $inject = ['storageService'];
+  static $inject = ['$http', 'API_URL'];
 
-  private DB_NAME = 'headquarters';
+  constructor(private $http: ng.IHttpService, private API_URL: string) { }
 
-  constructor(private storageService: StorageService) {
-    const data = storageService.getAll(this.DB_NAME);
-
-    if (!Array.isArray(data)) {
-      storageService.setAll(this.DB_NAME, []);
+  async create(data: Headquarter) {
+    try {
+      await this.$http.post(`${this.API_URL}/headquarter/create`, {
+        name: data.name,
+        location: data.location
+      });
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  save(data: object) {
-    this.storageService.saveEntry(this.DB_NAME, data);
-  }
+  async getList(): Promise<Headquarter[] | any> {
+    try {
+      const response = await this.$http.get(`${this.API_URL}/headquarter/list`);
 
-  update(_id: string, data: object) {
-    return this.storageService.updateEntry(this.DB_NAME, _id, data);
-  }
-
-  get(_id: string) {
-    return this.storageService.getEntry(this.DB_NAME, _id);
-  }
-
-  getList() {
-    return this.storageService.getAll(this.DB_NAME);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 

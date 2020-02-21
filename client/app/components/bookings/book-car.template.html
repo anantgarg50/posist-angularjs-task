@@ -63,7 +63,7 @@
                 <div class="select">
                   <select name="branch" required ng-model="$ctrl.booking.branch" ng-change="$ctrl.branchSelected()">
                     <option value="">Select Service...</option>
-                    <option ng-repeat=" branch in $ctrl.branchesList" value="{{branch._id}}">
+                    <option ng-repeat=" branch in $ctrl.branchesList track by $index" value="{{branch._id}}">
                       {{branch.name + " (" + branch.location + ")"}}</option>
                   </select>
                 </div>
@@ -81,7 +81,7 @@
                 <div class="select">
                   <select name="carBooked" required ng-model="$ctrl.booking.carBooked">
                     <option value="">Select Car...</option>
-                    <option ng-repeat="car in $ctrl.availableCars" value="{{car._id}}">
+                    <option ng-repeat="car in $ctrl.availableCars track by $index" value="{{car._id}}">
                       {{car.name}}</option>
                   </select>
                 </div>
@@ -135,7 +135,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="booking in $ctrl.currentBookings">
+          <tr ng-repeat="booking in $ctrl.currentBookings track by $index">
             <th scope="row">{{$index + 1 + "."}}</th>
             <td>{{booking.customerName}}</td>
             <td>{{booking.branch.name + " (" + booking.branch.location +")"}}</td>
@@ -176,7 +176,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="booking in $ctrl.endedBookings">
+          <tr ng-repeat="booking in $ctrl.endedBookings track by $index">
             <th scope="row">{{$index + 1 + "."}}</th>
             <td>{{booking.customerName}}</td>
             <td>{{booking.branch.name + " (" + booking.branch.location +")"}}</td>

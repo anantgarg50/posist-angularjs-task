@@ -2,36 +2,41 @@ import angular from 'angular';
 
 import { HeadquartersService } from '../../services/headquarters-service';
 
-interface Headquarter {
-  _id?: string,
-  name: string,
-  location: string,
-  branches: object[]
-}
-
 export class HeadquartersMainController {
-  static $inject = ['headquartersService'];
+  static $inject = ['$scope', '$timeout', 'headquartersService'];
 
   public headquartersList: Headquarter[];
   public initialValue: Headquarter = {
     name: undefined,
-    location: undefined,
-    branches: []
+    location: undefined
   };
   public headquarter: Headquarter = angular.copy(this.initialValue);
 
-  constructor(private headquartersService: HeadquartersService) {
-    this.headquartersList = headquartersService.getList();
+  constructor(
+    private $scope: ng.IScope,
+    private $timeout: ng.ITimeoutService,
+    private headquartersService: HeadquartersService
+  ) {
+    this.populateHeadquartersList();
   }
 
-  createHeadquarter(headquarterForm: angular.IFormController) {
+  populateHeadquartersList() {
+    this.$timeout(async () => {
+      this.headquartersList = await this.headquartersService.getList();
+
+      this.$scope.$digest();
+    });
+  }
+
+  async createHeadquarter(headquarterForm: angular.IFormController) {
     if (!headquarterForm.$valid) {
       return;
     }
 
-    this.headquartersService.save(this.headquarter);
+    await this.headquartersService.create(this.headquarter);
 
     this.resetForm(headquarterForm);
+    this.populateHeadquartersList();
   }
 
   resetForm(headquarterForm: angular.IFormController) {

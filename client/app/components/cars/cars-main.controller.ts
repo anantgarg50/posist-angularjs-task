@@ -3,45 +3,18 @@ import angular from 'angular';
 import { CarsService } from '../../services/cars-service';
 import { BranchesService } from '../../services/branches-service';
 import { DriversService } from '../../services/drivers-service';
-
-interface Car {
-  _id?: string,
-  operatedBy: any,
-  drivenBy: any,
-  manufacturer: string,
-  model: string,
-  seatingCapacity: number,
-  ratePerKilometer: number,
-  hourlyRate: number,
-  carRegNumber: string,
-  bookings: object[],
-  currentlyBooked: boolean
-}
-
-interface Branch {
-  _id?: string,
-  name: string,
-  location: string,
-  headquarter: any,
-  cars: object[],
-  bookings: object[]
-}
-
-interface Driver {
-  _id?: string,
-  name: string,
-  age: number,
-  permanentAddress: string,
-  assignedCar: object,
-  bookings: object[]
-}
-
 export class CarsMainController {
-  static $inject = ['carsService', 'branchesService', 'driversService'];
+  static $inject = [
+    '$scope',
+    '$timeout',
+    'carsService',
+    'branchesService',
+    'driversService'
+  ];
 
   public carsList: Car[];
-  public branchesList: BranchesService[];
-  public driversList: Driver[];
+  public branchesList: Branch[];
+  public unallocatedDriversList: Driver[];
   public initialValue: Car = {
     manufacturer: undefined,
     model: undefined,
@@ -50,59 +23,56 @@ export class CarsMainController {
     hourlyRate: undefined,
     carRegNumber: undefined,
     operatedBy: undefined,
-    drivenBy: undefined,
-    bookings: [],
-    currentlyBooked: false
+    drivenBy: undefined
   };
   public car: Car = angular.copy(this.initialValue);
 
   constructor(
+    private $scope: ng.IScope,
+    private $timeout: ng.ITimeoutService,
     private carsService: CarsService,
     private branchesService: BranchesService,
     private driversService: DriversService
   ) {
-    this.carsList = carsService.getList();
-    this.branchesList = branchesService.getList();
-    this.driversList = driversService.getList().filter((el: Driver) => !el.assignedCar);
+    this.populateCarsList();
+    this.populateBranchesList();
+    this.populateUnallocatedDriversList();
   }
 
-  createCar(carForm: angular.IFormController) {
+  async populateCarsList() {
+    this.$timeout(async () => {
+      this.carsList = await this.carsService.getList();
+
+      this.$scope.$digest();
+    });
+  }
+
+  async populateBranchesList() {
+    this.$timeout(async () => {
+      this.branchesList = await this.branchesService.getList();
+
+      this.$scope.$digest();
+    });
+  }
+
+  async populateUnallocatedDriversList() {
+    this.$timeout(async () => {
+      this.unallocatedDriversList = await this.driversService.getList(false);
+
+      this.$scope.$digest();
+    });
+  }
+
+  async createCar(carForm: angular.IFormController) {
     if (!carForm.$valid) {
       return;
     }
 
-    const branch: Branch = this.branchesService.get(this.car.operatedBy);
-    const driver: Driver = this.driversService.get(this.car.drivenBy);
-
-    this.car.drivenBy = {
-      _id: driver._id,
-      name: driver.name
-    };
-    this.car.operatedBy = {
-      _id: branch._id,
-      name: branch.name,
-      location: branch.location
-    };
-    const saved: Car = this.carsService.save(this.car);
-
-    driver.assignedCar = {
-      _id: saved._id,
-      name: `${saved.manufacturer} ${saved.model}`,
-      carRegNumber: saved.carRegNumber,
-      operatedBy: saved.operatedBy
-    };
-    this.driversService.update(driver._id, driver);
-
-    branch.cars.push({
-      _id: saved._id,
-      name: `${saved.manufacturer} ${saved.model}`,
-      carRegNumber: saved.carRegNumber,
-      drivenBy: saved.drivenBy,
-      currentlyBooked: saved.currentlyBooked
-    });
-    this.branchesService.update(branch._id, branch);
+    await this.carsService.create(this.car);
 
     this.resetForm(carForm);
+    this.populateCarsList();
+    this.populateUnallocatedDriversList();
   }
 
   resetForm(carForm: angular.IFormController) {

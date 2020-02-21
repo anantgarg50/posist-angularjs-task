@@ -1,70 +1,11 @@
-import { HeadquartersService } from './headquarters-service';
-import { BranchesService } from './branches-service';
-import { CarsService } from './cars-service';
-import { DriversService } from './drivers-service';
-
-interface Booking {
-  _id?: string,
-  customerName: string,
-  carBooked: any,
-  pickupAddress: string,
-  startTime: string,
-  branch: any,
-  ratePerKilometer: number,
-  driverDetails: any,
-  hourlyRate: number,
-  endTime: string,
-  kmsTravelled: number,
-  billedAmount: number
-}
-
-interface Car {
-  _id?: string,
-  operatedBy: any,
-  drivenBy: any,
-  manufacturer: string,
-  model: string,
-  seatingCapacity: number,
-  ratePerKilometer: number,
-  hourlyRate: number,
-  carRegNumber: string,
-  bookings: any[],
-  currentlyBooked: boolean
-}
-
-interface Branch {
-  _id?: string,
-  name: string,
-  location: string,
-  headquarter: any,
-  cars: any[],
-  bookings: any[]
-}
-
-interface Driver {
-  _id?: string,
-  name: string,
-  age: number,
-  permanentAddress: string,
-  assignedCar: object,
-  bookings: any[]
-}
-
-interface Headquarter {
-  _id?: string,
-  name: string,
-  location: string,
-  branches: object[]
-}
-
 export class ReportsService {
   static $inject = ['headquartersService', 'branchesService', 'carsService', 'driversService'];
 
   constructor(
-    private headquartersService: HeadquartersService,
-    private branchesService: BranchesService,
-    private carsService: CarsService,
-    private driversService: DriversService,
+    private headquartersService: any,
+    private branchesService: any,
+    private carsService: any,
+    private driversService: any,
   ) { }
 
   generateHeadquartersRevenueReport() {

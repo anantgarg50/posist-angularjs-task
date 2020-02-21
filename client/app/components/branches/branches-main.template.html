@@ -44,7 +44,8 @@
                 <div class="select">
                   <select name="headquarter" ng-model="$ctrl.branch.headquarter" required>
                     <option value="">Select Headquarter...</option>
-                    <option ng-repeat="headquarter in $ctrl.headquartersList" value="{{headquarter._id}}">
+                    <option ng-repeat="headquarter in $ctrl.headquartersList track by $index"
+                      value="{{headquarter._id}}">
                       {{headquarter.name + ", " + headquarter.location}}</option>
                   </select>
                 </div>
@@ -86,7 +87,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="branch in $ctrl.branchesList">
+          <tr ng-repeat="branch in $ctrl.branchesList track by $index">
             <th scope="row">{{$index + 1 + "."}}</th>
             <td>{{branch.name}}</td>
             <td>{{branch.location}}</td>

@@ -1,17 +1,19 @@
-const Users = require('./users');
-const Headquarters = require('./headquarters');
-const Branches = require('./branches');
-const Cars = require('./cars');
-const Drivers = require('./drivers');
-const Bookings = require('./bookings');
+const Auth = require('./auth');
+const User = require('./user');
+const Headquarter = require('./headquarter');
+const Branch = require('./branch');
+const Car = require('./car');
+const Driver = require('./driver');
+const Booking = require('./booking');
 const Reports = require('./reports');
 
 module.exports = {
-  Users,
-  Headquarters,
-  Branches,
-  Cars,
-  Drivers,
-  Bookings,
+  Auth,
+  User,
+  Headquarter,
+  Branch,
+  Car,
+  Driver,
+  Booking,
   Reports
 };

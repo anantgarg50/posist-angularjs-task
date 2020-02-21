@@ -1,0 +1,77 @@
+<section class="hero is-light is-bold is-fullheight">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+          <form name="registerForm" class="box" novalidate ng-submit="$ctrl.register(registerForm)">
+            <div class="field">
+              <div class="container has-text-centered">
+                <h1 class="title">
+                  Register
+                </h1>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Name</label>
+              <div class="control has-icons-left">
+                <input name="name" type="text" placeholder="e.g. Bob Smith" class="input" required
+                  ng-model="$ctrl.userData.name">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-user"></i>
+                </span>
+              </div>
+              <div ng-show="registerForm.name.$submitted || registerForm.name.$touched">
+                <p class="help is-danger" ng-show="registerForm.name.$error.required">Name is required!
+                </p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Email</label>
+              <div class="control has-icons-left">
+                <input name="email" type="email" placeholder="e.g. bobsmith@gmail.com" class="input" required
+                  ng-model="$ctrl.userData.email">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-envelope"></i>
+                </span>
+              </div>
+              <div ng-show="registerForm.email.$submitted || registerForm.email.$touched">
+                <p class="help is-danger" ng-show="registerForm.email.$error.required">Email is required!
+                </p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control has-icons-left">
+                <input name="password" type="password" placeholder="*******" class="input" required
+                  ng-model="$ctrl.userData.password">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-lock"></i>
+                </span>
+              </div>
+              <div ng-show="registerForm.password.$submitted || registerForm.password.$touched">
+                <p class="help is-danger" ng-show="registerForm.password.$error.required">Password is required!
+                </p>
+              </div>
+            </div>
+
+            <div class="field is-grouped is-grouped-centered">
+              <div class="control">
+                <button class="button is-primary" type="submit" ng-disabled="registerForm.$invalid">
+                  Register
+                </button>
+              </div>
+              <div class="control">
+                <button class="button is-light" type="reset" ng-click="$ctrl.resetForm(registerForm)">
+                  Reset
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

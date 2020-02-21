@@ -36,13 +36,13 @@
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
           <thead>
             <tr>
-              <th ng-repeat="column in $ctrl.tableColumns" scope="col">{{column}}</th>
+              <th ng-repeat="column in $ctrl.tableColumns track by $index" scope="col">{{column}}</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="row in $ctrl.tableData">
+            <tr ng-repeat="row in $ctrl.tableData track by $index">
               <td>{{$index + 1 + "."}}</td>
-              <td ng-repeat="data in row">{{data}}</td>
+              <td ng-repeat="data in row track by $index">{{data}}</td>
             </tr>
           </tbody>
         </table>

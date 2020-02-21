@@ -84,9 +84,9 @@ export class EndedBookingsController {
 
   constructor(
     private bookingsService: BookingsService,
-    private carsService: CarsService,
-    private branchesService: BranchesService,
-    private driversService: DriversService
+    private carsService: any,
+    private branchesService: any,
+    private driversService: any
   ) {
     this.bookingsList = bookingsService.getList();
     this.branchesList = branchesService.getList();

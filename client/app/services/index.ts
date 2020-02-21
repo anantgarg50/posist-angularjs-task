@@ -3,6 +3,7 @@ import { app } from '../app.module';
 
 import { StorageService } from './storage-service';
 
+import { TokenService } from './token-service';
 import { AuthService } from './auth-service';
 import { HeadquartersService } from './headquarters-service';
 import { BranchesService } from './branches-service';
@@ -13,6 +14,7 @@ import { ReportsService } from './reports-service';
 
 angular
   .module(app)
+  .service('tokenService', TokenService)
   .service('authService', AuthService)
   .service('storageService', StorageService)
   .service('headquartersService', HeadquartersService)
