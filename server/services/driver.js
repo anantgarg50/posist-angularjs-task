@@ -31,9 +31,35 @@ async function assignCar(id, car) {
   ).exec();
 }
 
+async function addBooking(id, booking) {
+  return Driver.updateOne(
+    { _id: id },
+    {
+      $push: {
+        bookings: booking
+      }
+    }
+  ).exec();
+}
+
+async function completeBooking(bookingId, bookingUpdate) {
+  return Driver.updateOne(
+    { 'bookings._id': bookingId },
+    {
+      $set: {
+        'bookings.$.endTime': bookingUpdate.endTime,
+        'bookings.$.kmsTravelled': bookingUpdate.kmsTravelled,
+        'bookings.$.billedAmount': bookingUpdate.billedAmount
+      }
+    }
+  ).exec();
+}
+
 module.exports = {
   create,
   read,
   readAll,
-  assignCar
+  assignCar,
+  addBooking,
+  completeBooking
 };

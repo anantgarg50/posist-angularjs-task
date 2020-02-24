@@ -16,15 +16,14 @@ const schema = new mongoose.Schema(
       drivenBy: {
         _id: mongoose.Schema.Types.ObjectId,
         name: String
-      },
-      currentlyBooked: {
-        type: Boolean,
-        default: false
       }
     }],
     bookings: [{
       _id: mongoose.Schema.Types.ObjectId,
-      customerName: String,
+      customer: {
+        _id: mongoose.Schema.Types.ObjectId,
+        name: String
+      },
       carBooked: {
         _id: mongoose.Schema.Types.ObjectId,
         name: String,

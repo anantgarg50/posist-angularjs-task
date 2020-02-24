@@ -43,7 +43,7 @@ interface Booking {
   carBooked?: Car,
   pickupAddress?: string,
   startTime?: string,
-  branch?: Branch,
+  branch?: any,
   ratePerKilometer?: number,
   driverDetails?: Driver,
   hourlyRate?: number,

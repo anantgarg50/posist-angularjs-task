@@ -44,13 +44,54 @@ async function readAll() {
   return Car.find().exec();
 }
 
-async function update(id, data) {
+async function readAvailableCars(id) {
+  return Car.find(
+    { 'operatedBy._id': id, currentlyBooked: false },
+    { manufacturer: 1, model: 1 }
+  ).exec();
+}
 
+async function addBooking(id, booking) {
+  return Car.updateOne(
+    { _id: id },
+    {
+      $push: {
+        bookings: booking
+      }
+    }
+  ).exec();
+}
+
+async function completeBooking(bookingId, bookingUpdate) {
+  return Car.updateOne(
+    { 'bookings._id': bookingId },
+    {
+      $set: {
+        'bookings.$.endTime': bookingUpdate.endTime,
+        'bookings.$.kmsTravelled': bookingUpdate.kmsTravelled,
+        'bookings.$.billedAmount': bookingUpdate.billedAmount
+      }
+    }
+  ).exec();
+}
+
+async function updateCurrentlyBookedStatus(id, currentlyBooked) {
+  return Car.updateOne(
+    { _id: id },
+    {
+      $set: {
+        currentlyBooked
+      }
+    }
+  ).exec();
 }
 
 module.exports = {
   create,
   read,
   readAll,
-  update
+  readAvailableCars,
+  addBooking,
+  completeBooking,
+  updateCurrentlyBookedStatus
 };

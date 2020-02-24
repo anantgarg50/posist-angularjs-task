@@ -31,7 +31,20 @@ async function list(req, res, next) {
   }
 }
 
+async function listAvailableCars(req, res, next) {
+  const { branchId } = req.query;
+
+  try {
+    const cars = await services.Car.readAvailableCars(branchId);
+
+    res.status(200).json(cars);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   create,
-  list
+  list,
+  listAvailableCars
 };

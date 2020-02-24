@@ -15,7 +15,38 @@ async function read(id) {
   return User.findOne({ _id: id }).exec();
 }
 
+async function readBookings(id) {
+  return User.findOne({ _id: id }, { bookings: 1 }).exec();
+}
+
+async function addBooking(id, booking) {
+  return User.updateOne(
+    { _id: id },
+    {
+      $push: {
+        bookings: booking
+      }
+    }
+  ).exec();
+}
+
+async function completeBooking(bookingId, bookingUpdate) {
+  return User.updateOne(
+    { 'bookings._id': bookingId },
+    {
+      $set: {
+        'bookings.$.endTime': bookingUpdate.endTime,
+        'bookings.$.kmsTravelled': bookingUpdate.kmsTravelled,
+        'bookings.$.billedAmount': bookingUpdate.billedAmount
+      }
+    }
+  ).exec();
+}
+
 module.exports = {
   create,
-  read
+  read,
+  readBookings,
+  addBooking,
+  completeBooking
 };

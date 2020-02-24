@@ -1,22 +1,35 @@
 const services = require('../services');
 
 async function getProfile(req, res, next) {
-  const { id } = req.params;
+  const user = req.authUser;
 
   try {
-    const user = await services.User.read(id);
+    const userProfile = await services.User.read(user._id);
 
     res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      type: user.type
+      _id: userProfile._id,
+      name: userProfile.name,
+      email: userProfile.email,
+      role: userProfile.role
     });
   } catch (error) {
     next(error);
   }
 }
 
+async function listBookings(req, res, next) {
+  const user = req.authUser;
+
+  try {
+    const data = await services.User.readBookings(user._id);
+
+    res.status(200).json(data.bookings);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
-  getProfile
+  getProfile,
+  listBookings
 };

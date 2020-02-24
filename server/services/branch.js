@@ -41,9 +41,35 @@ async function addCar(id, car) {
   ).exec();
 }
 
+async function addBooking(id, booking) {
+  return Branch.updateOne(
+    { _id: id },
+    {
+      $push: {
+        bookings: booking
+      }
+    }
+  ).exec();
+}
+
+async function completeBooking(bookingId, bookingUpdate) {
+  return Branch.updateOne(
+    { 'bookings._id': bookingId },
+    {
+      $set: {
+        'bookings.$.endTime': bookingUpdate.endTime,
+        'bookings.$.kmsTravelled': bookingUpdate.kmsTravelled,
+        'bookings.$.billedAmount': bookingUpdate.billedAmount
+      }
+    }
+  ).exec();
+}
+
 module.exports = {
   create,
   read,
   readAll,
-  addCar
+  addCar,
+  addBooking,
+  completeBooking
 };

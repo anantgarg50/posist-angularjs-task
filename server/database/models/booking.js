@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema(
   {
-    customerName: String,
+    customer: {
+      _id: mongoose.Schema.Types.ObjectId,
+      name: String
+    },
     carBooked: {
       _id: mongoose.Schema.Types.ObjectId,
       name: String,

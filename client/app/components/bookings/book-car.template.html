@@ -4,7 +4,7 @@
   <section class="section">
     <div class="container">
       <p class="title has-text-centered">
-        Bookings
+        Book a Car
       </p>
     </div>
   </section>
@@ -14,19 +14,6 @@
       <form name="bookingForm" novalidate ng-submit="$ctrl.createBooking(bookingForm)">
         <div class="field is-horizontal">
           <div class="field-body">
-            <div class="field">
-              <label class="label">Customer Name</label>
-              <div class="control">
-                <input name="customerName" class="input" type="text" required placeholder="Customer Name"
-                  ng-model="$ctrl.booking.customerName" />
-              </div>
-              <div ng-show="bookingForm.customerName.$submitted || bookingForm.customerName.$touched">
-                <p class="help is-danger" ng-show="bookingForm.customerName.$error.required">Customer Name is
-                  required!
-                </p>
-              </div>
-            </div>
-
             <div class="field">
               <label class="label">Pickup Address</label>
               <div class="control">
@@ -82,7 +69,7 @@
                   <select name="carBooked" required ng-model="$ctrl.booking.carBooked">
                     <option value="">Select Car...</option>
                     <option ng-repeat="car in $ctrl.availableCars track by $index" value="{{car._id}}">
-                      {{car.name}}</option>
+                      {{car.manufacturer + " " + car.model}}</option>
                   </select>
                 </div>
               </div>
@@ -117,6 +104,14 @@
   </section>
 
   <section class="section">
+    <div class="container">
+      <p class="title has-text-centered">
+        Your Bookings
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="table-container">
       <p class="title has-text-centered">
         Current Bookings
@@ -125,7 +120,6 @@
         <thead>
           <tr>
             <th scope="col">S.N.</th>
-            <th scope="col">Customer Name</th>
             <th scope="col">Service Used</th>
             <th scope="col">Car Booked</th>
             <th scope="col">Driver</th>
@@ -137,7 +131,6 @@
         <tbody>
           <tr ng-repeat="booking in $ctrl.currentBookings track by $index">
             <th scope="row">{{$index + 1 + "."}}</th>
-            <td>{{booking.customerName}}</td>
             <td>{{booking.branch.name + " (" + booking.branch.location +")"}}</td>
             <td>{{booking.carBooked.name + " (" + booking.carBooked.carRegNumber +")"}}</td>
             <td>{{booking.driverDetails.name}}</td>
@@ -164,7 +157,6 @@
         <thead>
           <tr>
             <th scope="col">S.N.</th>
-            <th scope="col">Customer Name</th>
             <th scope="col">Service Used</th>
             <th scope="col">Car Booked</th>
             <th scope="col">Driver</th>
@@ -178,7 +170,6 @@
         <tbody>
           <tr ng-repeat="booking in $ctrl.endedBookings track by $index">
             <th scope="row">{{$index + 1 + "."}}</th>
-            <td>{{booking.customerName}}</td>
             <td>{{booking.branch.name + " (" + booking.branch.location +")"}}</td>
             <td>{{booking.carBooked.name + " (" + booking.carBooked.carRegNumber +")"}}</td>
             <td>{{booking.driverDetails.name}}</td>

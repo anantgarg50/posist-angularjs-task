@@ -29,6 +29,16 @@ export class CarsService {
       console.error(error);
     }
   }
+
+  async getAvailableCars(branchId: string): Promise<Car[] | any> {
+    try {
+      const response = await this.$http.get(`${this.API_URL}/car/listAvailableCars?branchId=${branchId}`);
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 };
 
 export default CarsService;

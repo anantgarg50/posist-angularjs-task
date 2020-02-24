@@ -1,60 +1,51 @@
-import { StorageService } from './storage-service';
-
 export class BookingsService {
-  static $inject = ['storageService'];
+  static $inject = ['$http', 'API_URL'];
 
-  private DB_NAME = 'bookings';
+  constructor(private $http: ng.IHttpService, private API_URL: string) { }
 
-  constructor(private storageService: StorageService) {
-    const data = storageService.getAll(this.DB_NAME);
-
-    if (!Array.isArray(data)) {
-      storageService.setAll(this.DB_NAME, []);
+  async create(data: Booking) {
+    try {
+      await this.$http.post(`${this.API_URL}/booking/create`, {
+        carBooked: data.carBooked,
+        pickupAddress: data.pickupAddress,
+        startTime: data.startTime,
+        branch: data.branch
+      });
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  save(data: object) {
-    return this.storageService.saveEntry(this.DB_NAME, data);
+  async completeBooking(data: Booking) {
+    try {
+      await this.$http.post(`${this.API_URL}/booking/complete`, {
+        _id: data._id,
+        endTime: data.endTime,
+        kmsTravelled: data.kmsTravelled
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  update(_id: string, data: object) {
-    return this.storageService.updateEntry(this.DB_NAME, _id, data);
+  async getCurrentBookings(): Promise<Branch[] | any> {
+    try {
+      const response = await this.$http.get(`${this.API_URL}/booking/listCurrentBookings`);
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  get(_id: string) {
-    return this.storageService.getEntry(this.DB_NAME, _id);
-  }
+  async getEndedBookings(): Promise<Branch[] | any> {
+    try {
+      const response = await this.$http.get(`${this.API_URL}/booking/listEndedBookings`);
 
-  getList() {
-    return this.storageService.getAll(this.DB_NAME);
-  }
-
-  calculateBillAmount(
-    startTime: string,
-    endTime: string,
-    ratePerKilometer: number,
-    hourlyRate: number,
-    kmsTravelled: number
-  ) {
-    const DAILY_TIME_ALLOTTED: number = 8 * 60 * 60 * 1000;
-    const DAILY_KMS_ALLOTTED: number = 250;
-
-    const timeDiff: number = Number(new Date(endTime)) - Number(new Date(startTime));
-    const daysBooked: number = Math.ceil(timeDiff / (24 * 60 * 60 * 1000));
-    const totalAllowedHours: number = daysBooked * DAILY_TIME_ALLOTTED;
-    const minChargeableKms: number = daysBooked * DAILY_KMS_ALLOTTED;
-
-    const chargeableKms: number =
-      kmsTravelled < minChargeableKms ? minChargeableKms : kmsTravelled;
-    const extraChargeableHours: number = Math.ceil(
-      (timeDiff - totalAllowedHours) / (60 * 60 * 1000)
-    );
-
-    let billAmount: number = chargeableKms * ratePerKilometer;
-    billAmount +=
-      extraChargeableHours > 0 ? extraChargeableHours * hourlyRate : 0;
-
-    return billAmount;
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 
