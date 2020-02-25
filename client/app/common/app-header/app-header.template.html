@@ -9,41 +9,46 @@
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
     </a>
   </div>
 
   <div id="__main_navbar" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" href="/">
+      <a class="navbar-item" href="{{$ctrl.isAdmin? '/admin' : '/user'}}">
         Home
       </a>
 
-      <a class="navbar-item" href="/headquarters">
+      <a class="navbar-item" ng-if="$ctrl.isAdmin" href="/headquarters">
         Headquarters
       </a>
 
-      <a class="navbar-item" href="/branches">
+      <a class="navbar-item" ng-if="$ctrl.isAdmin" href="/branches">
         Branches
       </a>
 
-      <a class="navbar-item" href="/cars">
+      <a class="navbar-item" ng-if="$ctrl.isAdmin" href="/cars">
         Rental Cars
       </a>
 
-      <a class="navbar-item" href="/drivers">
+      <a class="navbar-item" ng-if="$ctrl.isAdmin" href="/drivers">
         Car Drivers
       </a>
 
-      <a class="navbar-item" href="/book">
+      <a class="navbar-item" ng-if="$ctrl.isUser" href="/book">
         Book a Car
       </a>
 
-      <a class="navbar-item" href="/bookings">
+      <a class="navbar-item" ng-if="$ctrl.isAdmin" href="/bookings">
         Bookings
       </a>
 
-      <a class="navbar-item" href="/reports">
+      <a class="navbar-item" ng-if="$ctrl.isAdmin" href="/reports">
         Reports
+      </a>
+
+      <a class="navbar-item" ng-click="$ctrl.logout()">
+        Logout
       </a>
     </div>
   </div>

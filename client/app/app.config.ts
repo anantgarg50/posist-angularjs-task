@@ -1,6 +1,14 @@
 import angular from 'angular';
 import { app } from './app.module';
 
+import { UserService } from './services/user-service';
+import { AuthService } from './services/auth-service';
+
+enum UserRoles {
+  admin = 1,
+  user = 2
+};
+
 angular
   .module(app)
   .constant('API_URL', 'http://localhost:5000/api')
@@ -9,46 +17,67 @@ angular
     '$locationProvider',
     '$httpProvider',
     function config(
-      $routeProvider: ng.route.IRouteProvider,
+      $routeProvider: any,
       $locationProvider: ng.ILocationProvider,
       $httpProvider: ng.IHttpProvider
     ) {
       $routeProvider
         .when('/', {
-          template: '<main-dashboard></main-dashboard>'
+          template: '<main-dashboard></main-dashboard>',
+          requiresAuth: false,
         })
         .when('/login', {
-          template: '<login></login>'
+          template: '<login></login>',
+          requiresAuth: false
         })
         .when('/register', {
-          template: '<register></register>'
+          template: '<register></register>',
+          requiresAuth: false
         })
         .when('/admin', {
-          template: '<admin-dashboard></admin-dashboard>'
+          template: '<admin-dashboard></admin-dashboard>',
+          requiresAuth: true,
+          permissions: [UserRoles.admin]
         })
         .when('/user', {
-          template: '<user-dashboard></user-dashboard>'
+          template: '<user-dashboard></user-dashboard>',
+          requiresAuth: true,
+          permissions: [UserRoles.user]
         })
         .when('/headquarters', {
-          template: `<headquarters-main></headquarters-main>`
+          template: `<headquarters-main></headquarters-main>`,
+          requiresAuth: true,
+          permissions: [UserRoles.admin]
         })
         .when('/branches', {
-          template: '<branches-main></branches-main>'
+          template: '<branches-main></branches-main>',
+          requiresAuth: true,
+          permissions: [UserRoles.admin]
         })
         .when('/cars', {
-          template: '<cars-main></cars-main>'
+          template: '<cars-main></cars-main>',
+          requiresAuth: true,
+          permissions: [UserRoles.admin]
         })
         .when('/drivers', {
-          template: '<drivers-main></drivers-main>'
+          template: '<drivers-main></drivers-main>',
+          requiresAuth: true,
+          permissions: [UserRoles.admin]
         })
         .when('/reports', {
-          template: '<reports-main></reports-main>'
+          template: '<reports-main></reports-main>',
+          requiresAuth: true,
+          permissions: [UserRoles.admin]
         })
         .when('/bookings', {
-          template: '<ended-bookings></ended-bookings>'
+          template: '<ended-bookings></ended-bookings>',
+          requiresAuth: true,
+          permissions: [UserRoles.admin]
         })
         .when('/book', {
-          template: '<book-car></book-car>'
+          template: '<book-car></book-car>',
+          requiresAuth: true,
+          permissions: [UserRoles.user]
         })
         .otherwise({
           redirectTo: '/'
@@ -58,30 +87,41 @@ angular
 
       $httpProvider.interceptors.push('httpInterceptor');
     }
-  ]);
-  // .run([
-  //   "$rootScope", 
-  //   "$location", 
-  //   function ($rootScope: ng.IRootScopeService, $location: ng.ILocationService) {
-  //   $rootScope.$on("$routeChangeStart", function (evt, to, from) {
-  //     // requires authorization?
-  //     if (to.authorize === true) {
-  //       to.resolve = to.resolve || {};
-  //       if (!to.resolve.authorizationResolver) {
-  //         // inject resolver
-  //         to.resolve.authorizationResolver = ["authService", function (authService) {
-  //           return authService.authorize();
-  //         }];
-  //       }
-  //     }
-  //   });
+  ])
+  .run([
+    "$rootScope",
+    "$location",
+    'authService',
+    'userService',
+    function (
+      $rootScope: ng.IRootScopeService,
+      $location: ng.ILocationService,
+      authService: AuthService,
+      userService: UserService
+    ) {
+      $rootScope.$on("$routeChangeStart", async function (event, next, prev) {
+        if (next.requiresAuth) {
+          if (!authService.isLoggedIn()) {
+            $location.path('/');
 
-  //   $rootScope.$on("$routeChangeError", function (evt, to, from, error) {
-  //     if (error instanceof AuthorizationError) {
-  //       // redirect to login with original path we'll be returning back to
-  //       $location
-  //         .path("/login")
-  //         .search("returnTo", to.originalPath);
-  //     }
-  //   });
-  // }]);
+            return false;
+          }
+
+          const user = await userService.getUser();
+
+          if (next.permissions.indexOf(user.role) === -1) {
+            $location.path(user.role === 1 ? '/admin' : '/user');
+          }
+        } else {
+          if (!authService.isLoggedIn()) {
+            return true;
+          }
+
+          const user = await userService.getUser();
+
+          $location.path(user.role === 1 ? '/admin' : '/user');
+
+          $rootScope.$digest();
+        }
+      });
+    }]);

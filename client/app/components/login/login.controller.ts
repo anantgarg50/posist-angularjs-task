@@ -1,9 +1,10 @@
 import angular from 'angular';
 
 import { AuthService } from '../../services/auth-service';
+import { UserService } from '../../services/user-service';
 
 export class LoginController {
-  static $inject = ['$scope', '$location', 'authService'];
+  static $inject = ['$scope', '$location', 'authService', 'userService'];
 
   public initialValue: UserLoginData = {
     email: undefined,
@@ -14,15 +15,18 @@ export class LoginController {
   constructor(
     private $scope: ng.IScope,
     private $location: ng.ILocationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) { }
 
   async login(form: angular.IFormController) {
     const success = await this.authService.login(this.userData);
 
     if (success) {
+      const user = await this.userService.getUser();
+
       this.$scope.$apply(() => {
-        this.$location.path('/');
+        this.$location.path(user.role === 1 ? '/admin' : '/user');
       });
     } else {
       console.error('Login Error!');
