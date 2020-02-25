@@ -123,6 +123,7 @@ async function complete(data) {
     kmsTravelled: booking.kmsTravelled,
     billedAmount: booking.billedAmount
   });
+  await Car.updateCurrentlyBookedStatus(booking.carBooked._id, false);
 
   await Driver.completeBooking(booking._id, {
     endTime: booking.endTime,

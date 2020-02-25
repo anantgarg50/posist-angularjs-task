@@ -6,14 +6,13 @@ interface ReportOption {
 };
 
 export class ReportsMainController {
-  static $inject = ['reportsService'];
+  static $inject = ['$scope', '$timeout', 'reportsService'];
 
   public reportTitle: string;
   public reportOptions: ReportOption[];
   public selectedOption: ReportOption;
   public tableColumns: string[];
   public tableData: any[];
-  public rowCells: string[];
 
   private columnConfig: any = {
     headquartersRevenue: {
@@ -22,12 +21,6 @@ export class ReportsMainController {
         "Headquarter Name",
         "Location",
         "Revenue"
-      ],
-      rowCells: [
-        "{{$index + 1 + '.'}}",
-        "{{data.name}}",
-        "{{data.location}}",
-        "{{data.revenue}}"
       ]
     },
     branchesRevenue: {
@@ -37,12 +30,6 @@ export class ReportsMainController {
         "Location",
         "Headquarter",
         "Revenue"
-      ],
-      rowCells: [
-        "{{$index + 1 + '.'}}",
-        "{{data.driverName}}",
-        "{{data.driverAge}}",
-        "{{data.numberOfBookings}}"
       ]
     },
     rentalCarsRevenue: {
@@ -52,22 +39,10 @@ export class ReportsMainController {
         "Make/Model",
         "Operated By",
         "Revenue"
-      ],
-      rowCells: [
-        "{{$index + 1 + '.'}}",
-        "{{data.driverName}}",
-        "{{data.driverAge}}",
-        "{{data.numberOfBookings}}"
       ]
     },
     carDriversRevenue: {
-      colNames: ["S.N.", "Driver Name", "Age", "Revenue"],
-      rowCells: [
-        "{{$index + 1 + '.'}}",
-        "{{data.driverName}}",
-        "{{data.driverAge}}",
-        "{{data.numberOfBookings}}"
-      ]
+      colNames: ["S.N.", "Driver Name", "Age", "Revenue"]
     },
     carDriversHighestBookings: {
       colNames: [
@@ -75,12 +50,6 @@ export class ReportsMainController {
         "Driver Name",
         "Age",
         "No. of Bookings"
-      ],
-      rowCells: [
-        "{{$index + 1 + '.'}}",
-        "{{data.driverName}}",
-        "{{data.driverAge}}",
-        "{{data.numberOfBookings}}"
       ]
     },
     rentalCarsHighestBookings: {
@@ -90,12 +59,6 @@ export class ReportsMainController {
         "Make/Model",
         "Operated By",
         "No. of Bookings"
-      ],
-      rowCells: [
-        "{{$index + 1 + '.'}}",
-        "{{data.driverName}}",
-        "{{data.driverAge}}",
-        "{{data.numberOfBookings}}"
       ]
     },
     branchesHighestBookings: {
@@ -105,12 +68,6 @@ export class ReportsMainController {
         "Location",
         "Headquarter",
         "No. of Bookings"
-      ],
-      rowCells: [
-        "{{$index + 1 + '.'}}",
-        "{{data.driverName}}",
-        "{{data.driverAge}}",
-        "{{data.numberOfBookings}}"
       ]
     },
     carDriversHighestKms: {
@@ -119,12 +76,6 @@ export class ReportsMainController {
         "Driver Name",
         "Age",
         "KMs Driven"
-      ],
-      rowCells: [
-        "{{$index + 1 + '.'}}",
-        "{{data.driverName}}",
-        "{{data.driverAge}}",
-        "{{data.numberOfBookings}}"
       ]
     },
     rentalCarsHighestKms: {
@@ -134,17 +85,15 @@ export class ReportsMainController {
         "Make/Model",
         "Operated By",
         "KMs Driven"
-      ],
-      rowCells: [
-        "{{$index + 1 + '.'}}",
-        "{{data.driverName}}",
-        "{{data.driverAge}}",
-        "{{data.numberOfBookings}}"
       ]
     }
   }
 
-  constructor(private reportsService: any) {
+  constructor(
+    private $scope: ng.IScope,
+    private $timeout: ng.ITimeoutService,
+    private reportsService: ReportsService
+  ) {
     this.reportOptions = [
       { id: "", name: "Select ..." },
       { id: "headquartersRevenue", name: "Headquarters Revenue" },
@@ -168,43 +117,20 @@ export class ReportsMainController {
 
     if (this.selectedOption.id) {
       this.tableColumns = this.columnConfig[this.selectedOption.id].colNames;
-      this.rowCells = this.columnConfig[this.selectedOption.id].rowCells;
+
       this.populateReportData(this.selectedOption.id);
+    } else {
+      this.tableColumns = [];
+      this.tableData = [];
     }
   }
 
   populateReportData(reportType: string) {
-    switch (reportType) {
-      case "headquartersRevenue":
-        this.tableData = this.reportsService.generateHeadquartersRevenueReport();
-        break;
-      case "branchesRevenue":
-        this.tableData = this.reportsService.generateBranchesRevenueReport();
-        break;
-      case "rentalCarsRevenue":
-        this.tableData = this.reportsService.generateRentalCarsRevenueReport();
-        break;
-      case "carDriversRevenue":
-        this.tableData = this.reportsService.generateCarDriversRevenueReport();
-        break;
-      case "carDriversHighestBookings":
-        this.tableData = this.reportsService.generateCarDriversHighestBookingsReport();
-        break;
-      case "rentalCarsHighestBookings":
-        this.tableData = this.reportsService.generateRentalCarsHighestBookingsReport();
-        break;
-      case "branchesHighestBookings":
-        this.tableData = this.reportsService.generateBranchesHighestBookingsReport();
-        break;
-      case "carDriversHighestKms":
-        this.tableData = this.reportsService.generateCarDriversHighestKmsReport();
-        break;
-      case "rentalCarsHighestKms":
-        this.tableData = this.reportsService.generateRentalCarsHighestKmsReport();
-        break;
-      default:
-        break;
-    }
+    this.$timeout(async () => {
+      this.tableData = await this.reportsService.generateReport(reportType);
+
+      this.$scope.$digest();
+    });
   }
 };
 
